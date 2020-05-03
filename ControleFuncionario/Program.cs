@@ -8,43 +8,54 @@ namespace ControleFuncionario
     {
         static void Main(string[] args)
         {
-            List<Funcionario> funcionarios = new List<Funcionario>();
-            Console.Write("Quantos funcionários deseja registrar: ");
-            int qtde = int.Parse(Console.ReadLine());
-
-            for (int i = 1; i <= qtde; i++)
+            try
             {
-                Console.WriteLine($"{i}ºFuncionário:");
-                Console.Write("Id: ");
-                int id = int.Parse(Console.ReadLine());
-                Console.Write("Nome: ");
-                string nome = Console.ReadLine();
-                Console.Write("Salario: ");
-                double salario = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                List<Funcionario> funcionarios = new List<Funcionario>();
+                Console.Write("Quantos funcionários deseja registrar: ");
+                int qtde = int.Parse(Console.ReadLine());
 
-                funcionarios.Add(new Funcionario(id, nome, salario));
+                for (int i = 1; i <= qtde; i++)
+                {
+                    Console.WriteLine($"{i}ºFuncionário:");
+                    Console.Write("Id: ");
+                    int id = int.Parse(Console.ReadLine());
+                    Console.Write("Nome: ");
+                    string nome = Console.ReadLine();
+                    Console.Write("Salario: ");
+                    double salario = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+                    funcionarios.Add(new Funcionario(id, nome, salario));
+                    Console.WriteLine();
+                }
+
+                Console.Write("Qual o id do funcionário que deseja aumentar o salário? ");
+                int idAumento = int.Parse(Console.ReadLine());
+
+                var func = funcionarios.Find(x => x.Id == idAumento);
+
+                if (func == null)
+                    Console.WriteLine("Funcionário não encotrado");
+                else
+                {
+                    Console.Write("Porcentagem: ");
+                    double porcentagem = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                    func.AumentarSalario(porcentagem);
+                }
+
                 Console.WriteLine();
+                Console.WriteLine("Lista de funcionários:");
+
+                foreach (Funcionario f in funcionarios)
+                    Console.WriteLine(f);
             }
-
-            Console.Write("Qual o id do funcionário que deseja aumentar o salário? ");
-            int idAumento = int.Parse(Console.ReadLine());
-           
-            var func = funcionarios.Find(x => x.Id == idAumento);
-
-            if (func == null)
-                Console.WriteLine("Funcionário não encotrado");
-            else
+            catch (FormatException e)
             {
-                Console.Write("Porcentagem: ");
-                double porcentagem = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-                func.AumentarSalario(porcentagem);
+                Console.WriteLine($"Erro de formatação: {e.Message}");
             }
-
-            Console.WriteLine();
-            Console.WriteLine("Lista de funcionários:");
-
-            foreach (Funcionario f in funcionarios)
-                Console.WriteLine(f);
+            catch (Exception e)
+            {
+                Console.WriteLine($"Erro inesperado: {e.Message}");
+            }
         }
     }
 }
